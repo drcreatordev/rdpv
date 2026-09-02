@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RdpV — Remote Desktop</title>
+<style>
+  :root { --brand:#1a73e8; --bg:#0f1221; --card:#171b2e; --text:#eef1f8; --muted:#9aa3c0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Segoe UI', system-ui, sans-serif; background:var(--bg); color:var(--text); }
+  header { background:linear-gradient(135deg,#1a73e8,#6b3ff2); padding:48px 24px; text-align:center; }
+  header h1 { margin:0 0 8px; font-size:34px; }
+  header p { margin:0; color:#e6ecff; }
+  main { max-width:960px; margin:0 auto; padding:32px 16px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+  .card { background:var(--card); border:1px solid #2a3050; border-radius:14px; padding:24px; text-align:center; }
+  .card h2 { margin:0 0 10px; font-size:20px; }
+  .card p { color:var(--muted); font-size:14px; min-height:44px; margin:0 0 18px; }
+  .badge { display:inline-block; background:#0e2a5e; color:#7fb1ff; font-size:12px; padding:3px 10px; border-radius:99px; margin-bottom:14px; }
+  .btn { display:block; background:var(--brand); color:#fff; text-decoration:none; padding:14px 20px; border-radius:10px; font-weight:600; font-size:16px; transition:background .15s; }
+  .btn:hover { background:#0f5fd0; }
+  .btn.ghost { background:#232a44; }
+  .btn.ghost:hover { background:#2d3558; }
+  ol { color:var(--muted); font-size:14px; line-height:1.8; }
+  footer { text-align:center; color:#5b6486; font-size:13px; padding:32px 0 48px; }
+  a { color:#7fb1ff; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>RdpV Remote Desktop</h1>
+  <p>Lihat layar laptop dari mana saja, aman lewat TLS &mdash; tanpa kontrol jarak jauh &mdash; download di sini.</p>
+</header>
+
+<main>
+  <div class="cards">
+    <div class="card">
+      <span class="badge">untuk laptop yang &ldquo;ditonton&rdquo;</span>
+      <h2>Host</h2>
+      <p>Pasang di laptop yang layarnya ingin dilihat. Berjalan diam-diam di background, ada indikator task-tray saat ada penonton.</p>
+      <a class="btn" href="download/RdpV.Host.Setup.exe" download>Download Host Installer</a>
+    </div>
+
+    <div class="card">
+      <span class="badge">untuk laptop penonton</span>
+      <h2>Controller</h2>
+      <p>Pasang di laptop yang dipakai melihat. Tampilan bersih: connect, lihat live, status &amp; latency.</p>
+      <a class="btn" href="download/RdpV.Controller.Setup.exe" download>Download Controller Installer</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h2 style="text-align:left">Cara pakai</h2>
+    <ol style="text-align:left">
+      <li>Download &amp; jalankan <b>Host Installer</b> di laptop yang mau ditonton (klik kanan &gt; Run as administrator). Catat <b>Device ID</b> dan <b>Auth Token</b> yang tampil.</li>
+      <li>Download &amp; jalankan <b>Controller Installer</b> di laptop penonton.</li>
+      <li>Buka aplikasi <b>RdpV Controller</b>, masukkan alamat relay + Device ID + Auth Token, pilih file <b>relay-ca.crt</b> (Trusted CA), klik <b>Connect</b>.</li>
+      <li>Selesai melihat? Klik <b>Disconnect</b>. Laptop host akan otomatis berubah dari hijau ke normal di tray.</li>
+      <li>Panduan lengkap &amp; cara pasang relay sendiri: <a href="PANDUAN.md">PANDUAN.md</a></li>
+    </ol>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h2 style="text-align:left">Untuk operator / yang mau mandiri</h2>
+    <p style="text-align:left">Jalankan relay sendiri (Windows service, auto-start) di server/pc yang selalu online.</p>
+    <a class="btn ghost" style="margin-bottom:8px" href="download/RdpV.RelayServer.exe" download>Download Relay (exe)</a>
+    <a class="btn ghost" href="download/install-relay-service.ps1" download>Download install-relay-service.ps1</a>
+  </div>
+
+  <footer>
+    Keamanan: akses hanya lewat token rahasia milik pemilik host &mdash; tidak ada backdoor.
+    Relay memvalidasi melalui hash SHA-256 token. Lihat <code style="background:#1d2236;padding:2px 6px;border-radius:4px">PANDUAN.md</code> untuk detail.
+  </footer>
+</main>
+
+</body>
+</html>
