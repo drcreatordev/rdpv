@@ -5,63 +5,72 @@
 
 ![Status](https://img.shields.io/badge/status-stable-green)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-blue)
-![License](https://img.shields.io/badge/license-MIT-orange)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
+![License](https://img.shields.io/badge/license-MIT-orange)
 
 ---
 
-## Download
+## 📥 Download
+
+Buka website download: **https://keyyz12.github.io/rdpv/**
 
 | Komponen | Ukuran | Link |
 |----------|--------|------|
-| **Host Setup** (GUI installer) | ~190 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe) |
-| **Controller Setup** | ~96 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe) |
-| **Host Indicator** (tray icon) | ~154 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.HostIndicator.exe) |
-| **Relay Server** (untuk operator) | ~78 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.RelayServer.exe) |
-| **Install Relay Script** | <1 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/install-relay-service.ps1) |
+| 🖥️ **Host Setup** (GUI installer) | ~190 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe) |
+| 🎬 **Controller Setup** | ~96 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe) |
+| 🩺 **Host Indicator** (tray icon) | ~154 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.HostIndicator.exe) |
+| 🛰️ **Relay Server** (untuk operator) | ~78 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.RelayServer.exe) |
+| ⚙️ **Install Relay Script** | <1 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/install-relay-service.ps1) |
 
-Website download: **https://keyyz12.github.io/rdpv/**
-
-> **Untuk client:** Lihat [QUICKSTART.md](https://keyyz12.github.io/rdpv/QUICKSTART.md) — panduan 3 langkah yang simpel.
+> 💡 **Panduan cepat:** [QUICKSTART.md](https://keyyz12.github.io/rdpv/QUICKSTART.md) — 3 langkah simpel untuk klien.
+> 📖 **Panduan lengkap:** [PANDUAN.md](https://keyyz12.github.io/rdpv/PANDUAN.md)
 
 ---
 
-## Arsitektur
+## 🧭 Tentang
+
+**RdpV** adalah aplikasi **remote desktop view-only** — kamu bisa **melihat layar** PC lain
+dari mana saja, **tanpa** kontrol mouse/keyboard dan **tanpa** transfer file. Dirancang
+khusus untuk kebutuhan *monitoring* / *tech support* yang aman dan ringan.
+
+### Kenapa RdpV?
+
+- ✅ **Hanya melihat** — tidak bisa mengontrol, cocok untuk monitoring
+- ✅ **Enkripsi TLS** — semua koneksi aman
+- ✅ **Token rahasia** — akses terkontrol, tidak ada backdoor
+- ✅ **Self-contained** — satu file .exe, tanpa perlu install .NET
+
+---
+
+## 🏗️ Arsitektur
 
 ```
-┌────────────┐        TLS + frames        ┌─────────┐        TLS + frames        ┌────────────┐
+┌────────────┐        TLS (frames)         ┌─────────┐        TLS (frames)         ┌────────────┐
 │    Host    │ ◄─────────────────────────► │  Relay  │ ◄─────────────────────────► │ Controller │
-│ (PC Klien) │       view-only            │ Server  │       view-only            │ (PC Teknisi)│
-└────────────┘                            └─────────┘                            └────────────┘
-       │                                                                 │
-       └── Host Indicator (tray: hijau saat ada penonton)                └── Fullscreen mode
-                                                                           (excl. dari capture)
+│ (PC Klien) │         view-only           │ Server  │         view-only           │ (PC Penonton)│
+└────────────┘                             └─────────┘                             └────────────┘
+       │                                                                  │
+       └── Host Indicator (tray: hijau saat ada penonton)                 └── Fullscreen mode
+                                                                            (excluded dari capture)
 ```
 
-**Alur koneksi:**
-1. **Host** register ke relay dengan Device ID + token (hashed SHA-256)
-2. **Controller** masukkan kode Device ID + token → relay verifikasi → paired
-3. Frames dikirim via TLS, view-only — tidak ada kontrol mouse/keyboard
+### Alur koneksi
+
+1. **Host** mendaftar ke relay dengan **Device ID** + **Auth Token** (di-hash SHA-256)
+2. **Controller** memasukkan **Device ID** + **Auth Token** → relay memverifikasi → terhubung
+3. Frames layar dikirim via **TLS**, view-only — tanpa kontrol mouse/keyboard
 
 ---
 
-## Cara Pakai
+## 🚀 Cara Pakai
 
 ### Skenario 1 — Pakai relay yang sudah ada
 
-1. **Di PC yang layarnya mau dilihat (Host):**
-   - Jalankan `RdpV.Host.Setup.exe` (klik kanan → Run as Administrator)
-   - Isi **Relay host**, **Port**, dan **Relay CA** (file `.crt` dari penyedia relay)
-   - Klik **Pasang Sekarang**
-   - Catat **Device ID** dan **Auth Token** yang tampil → **klik Salin**
-
-2. **Di PC penonton (Controller):**
-   - Jalankan `RdpV.Controller.Setup.exe`
-   - Buka **RdpV Controller**
-   - Isi: Relay host, Port, Device ID, Auth Token, pilih file Trusted CA
-   - Klik **Connect** → layar Host tampil
-
-3. **Selesai melihat?** Klik **Disconnect**. Host otomatis idle.
+| Langkah | Di mana | Lakukan |
+|---------|---------|---------|
+| 1 | **Host** (PC klien) | Jalankan `RdpV.Host.Setup.exe` (klik kanan → Run as Administrator) → isi Relay host/port/CA → **Pasang Sekarang** → catat **Device ID** & **Auth Token** |
+| 2 | **Controller** (PC penonton) | Jalankan `RdpV.Controller.Setup.exe` → buka **RdpV Controller** → isi Relay host/port/CA + Device ID + Auth Token → **Connect** |
+| 3 | — | Selesai melihat? Klik **Disconnect** |
 
 ### Skenario 2 — Pasang relay sendiri
 
@@ -73,50 +82,72 @@ powershell -ExecutionPolicy Bypass -File install-relay-service.ps1 -Port 8443
 powershell -ExecutionPolicy Bypass -File install-relay-service.ps1 -Uninstall
 ```
 
-Relay otomatis:
-- Publish + install sebagai service `RdpV.Relay`
-- Buka port di Windows Firewall
-- Buat sertifikat self-signed → bagikan `relay-ca.crt` ke klien
+Script otomatis melakukan:
+- ✅ Mem-publish relay + install sebagai service `RdpV.Relay` (auto-start)
+- ✅ Membuka port di Windows Firewall
+- ✅ Membuat sertifikat self-signed → menampilkan `relay-ca.crt` untuk dibagikan
 
 ---
 
-## Fitur
+## ✨ Fitur
 
-- **View-only** — tidak ada kontrol mouse/keyboard, tidak ada transfer file
-- **TLS end-to-end** — semua komunikasi terenkripsi
-- **Token rahasia** — akses hanya dengan Device ID + Auth Token (hashed, tidak pernah disimpan plain)
-- **Host Indicator** — tray icon hijau saat ada penonton, normal saat idle
-- **Resolution scaling** — pilih resolusi streaming sesuai kebutuhan
-- **Fullscreen** — mode layar penuh, otomatis mengecualikan jendela Controller dari capture
-- **Auto-start** — Host & Relay jalan sebagai Windows service, otomatis saat boot
-- **Self-extracting installer** — satu file .exe, tidak perlu dependensi tambahan
+| Fitur | Keterangan |
+|-------|-----------|
+| 🔒 **View-only** | Tidak ada kontrol mouse/keyboard, tidak ada transfer file |
+| 🔐 **TLS end-to-end** | Semua komunikasi terenkripsi |
+| 🛡️ **Token rahasia** | Akses hanya dengan Device ID + Auth Token (di-hash, tidak pernah plain) |
+| 🩺 **Host Indicator** | Tray icon hijau saat ada penonton, normal saat idle |
+| 📐 **Resolution scaling** | Pilih resolusi streaming sesuai kebutuhan |
+| 🖵 **Fullscreen** | Mode layar penuh, otomatis mengecualikan jendela Controller dari capture |
+| ⚡ **Auto-start** | Host & Relay jalan sebagai Windows service saat boot |
+| 📦 **Self-extracting** | Satu file .exe, tanpa dependensi tambahan |
 
 ---
 
-## Persyaratan Sistem
+## 🖥️ Persyaratan Sistem
 
 - Windows 10 / 11 (x64)
 - Tidak perlu .NET Runtime (sudah self-contained)
 
 ---
 
-## Troubleshooting
+## 📚 Struktur Project
 
-| Masalah | Solusi |
-|---------|--------|
-| Tidak bisa connect | Pastikan relay host/port/CA benar, relay online, port terbuka |
-| Layar dalam layar (feedback loop) | Host & Controller di PC sama → pakai mode Fullscreen |
-| Sempat connect lalu putus | Cek `sc query RdpV.Host` masih running |
-| Resolusi tidak sesuai | Host hanya kirim resolusi native monitor |
+```
+├── src/
+│   ├── HostApp/          # Service Host (register, stream layar, view-only)
+│   ├── HostIndicator/    # Tray icon indikator (hijau saat ada penonton)
+│   ├── HostSetup/        # Installer Host (GUI)
+│   ├── ControllerApp/    # Aplikasi Controller (WPF)
+│   ├── ControllerSetup/  # Installer Controller
+│   ├── RelayServer/      # Relay server (TLS, bridging, Windows service)
+│   ├── SetupLib/         # Library self-extractor
+│   └── SharedLibrary/    # Shared config, protocol, security
+├── scripts/
+│   ├── build-download-site.ps1   # Build semua installer ke website/download
+│   ├── install-relay-service.ps1 # Install relay sebagai service
+│   └── serve-site.ps1            # (opsional) serve website di LAN
+└── website/
+    ├── index.html        # Landing page download
+    ├── QUICKSTART.md     # Panduan cepat (klien)
+    ├── PANDUAN.md        # Panduan lengkap
+    └── README.md         # Dokumen ini
+```
 
 ---
 
-## Bagi Operator Relay
+## 🛠️ Bagi Developer
 
-Relay server harus selalu online dan bisa diakses dari internet. Opsi:
-- **IP publik** + port forward
-- **VPS** (minimal 1 core, 512 MB RAM)
-- **Tailscale / Cloudflare Tunnel** untuk akses tanpa port forward
+### Persyaratan Build
+
+- .NET 8 SDK (x64)
+- Windows 10/11
+
+### Build semua installer
+
+```powershell
+.\scripts\build-download-site.ps1
+```
 
 ### Jalankan relay dari source
 
@@ -131,7 +162,7 @@ src/RelayServer/bin/Release/net8.0-windows/win-x64/publish/RdpV.RelayServer.exe 
 src/RelayServer/bin/Release/net8.0-windows/win-x64/publish/RdpV.RelayServer.exe --service 8443
 ```
 
-### Sertifikat custom
+### Sertifikat relay custom
 
 ```powershell
 .\RdpV.RelayServer.exe 8443 --cert C:\certs\relay.pfx --certpass "rahasia"
@@ -139,13 +170,40 @@ src/RelayServer/bin/Release/net8.0-windows/win-x64/publish/RdpV.RelayServer.exe 
 
 ---
 
-## Lisensi
+## 🐛 Troubleshooting
 
-MIT License — bebas dipakai, dimodifikasi, dan didistribusikan.
+| Masalah | Solusi |
+|---------|--------|
+| Tidak bisa connect | Pastikan relay host/port/CA benar, relay online, port terbuka |
+| Layar dalam layar (feedback loop) | Host & Controller di PC sama → pakai mode **Fullscreen** |
+| Sempat connect lalu putus | Cek `sc query RdpV.Host` masih running, relay online |
+| Resolusi tidak sesuai | Host hanya mengirim resolusi native monitor |
 
 ---
 
-## Support
+## 🤝 Kontribusi
 
-- Issue: [GitHub Issues](https://github.com/Keyyz12/rdpv/issues)
-- Panduan lengkap: [PANDUAN.md](https://keyyz12.github.io/rdpv/PANDUAN.md)
+1. Fork repository
+2. Buat branch fitur (`git checkout -b feat/nama-fitur`)
+3. Commit perubahan (`git commit -m "feat: tambah hal baru"`)
+4. Push (`git push origin feat/nama-fitur`)
+5. Buka Pull Request
+
+---
+
+## 📄 Lisensi
+
+[MIT License](LICENSE) — bebas dipakai, dimodifikasi, dan didistribusikan.
+
+---
+
+## 🙋 Support
+
+- **Issue / bug:** [GitHub Issues](https://github.com/Keyyz12/rdpv/issues)
+- **Panduan pengguna:** [PANDUAN.md](https://keyyz12.github.io/rdpv/PANDUAN.md)
+
+---
+
+<p align="center">
+  <sub>Dibuat dengan ❤️ menggunakan .NET 8 — <b>RdpV</b></sub>
+</p>
