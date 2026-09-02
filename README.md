@@ -22,6 +22,8 @@
 
 Website download: **https://keyyz12.github.io/rdpv/**
 
+> **Untuk client:** Lihat [QUICKSTART.md](https://keyyz12.github.io/rdpv/QUICKSTART.md) — panduan 3 langkah yang simpel.
+
 ---
 
 ## Arsitektur
