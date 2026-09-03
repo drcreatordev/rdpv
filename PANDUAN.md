@@ -10,7 +10,7 @@ pemilik PC.
 
 | File | Untuk siapa | Fungsi |
 |------|-------------|--------|
-| `RdpV.Host.Setup.exe` | PC yang **layarnya mau dilihat** (mis. laptop klien) | Install di PC korban/klien agar layarnya bisa di-stream |
+| `RdpV.Host.Setup.exe` | PC yang **layarnya mau dilihat** (mis. laptop klien) | Install di PC klien agar layarnya bisa di-stream |
 | `RdpV.Controller.Setup.exe` | PC yang **ingin melihat** (mis. PC Anda / teknisi) | Aplikasi untuk melihat layar Host |
 | `RdpV.HostIndicator.exe` | (opsional) PC yang sama dengan Host | Ikon tray: hijau = ada yang melihat, normal = idle |
 | `RdpV.RelayServer.exe` + `install-relay-service.ps1` | **Penyedia relay** (opsional) | Untuk operator/klien yang ingin menjalankan relay sendiri |
@@ -19,13 +19,24 @@ pemilik PC.
 
 ## Skenario A — Pakai relay yang sudah disediakan
 
+> Ini kasus paling umum: relay disediakan oleh operator/penyedia, klien tidak perlu
+> mengurus server. Operator cukup membagikan info di bawah.
+
+**Info yang dibagikan operator ke klien:**
+
+| Info | Contoh |
+|------|--------|
+| Alamat relay | `36.8.154.208` atau `relay.example.com` |
+| Port relay | `8443` |
+| File CA | `relay-ca.crt` |
+
 1. **Di PC yang layarnya mau dilihat (Host):**
    - Install `RdpV.Host.Setup.exe` (klik **Yes** saat UAC/minta admin).
    - Setup perlu info dari penyedia relay:
-     - **Relay host** = alamat relay (mis. `relay.contoh.com` atau IP publik)
+     - **Relay host** = alamat relay (dari tabel di atas)
      - **Relay port** = port relay (contoh `8443`)
      - **Relay CA** = file `relay-ca.crt` yang dibagikan penyedia
-   - Catat **Device ID** dan **Auth token** yang ditampilkan/ada di pengaturan Host.
+   - Catat **Device ID** dan **Auth token** yang ditampilkan.
      Token ini RAHASIA — hanya beri ke orang yang boleh melihat layar.
 
 2. **Di PC yang ingin melihat (Controller):**

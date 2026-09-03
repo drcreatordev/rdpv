@@ -344,52 +344,40 @@
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label">Cara Pakai</div>
-      <h2>Tiga langkah menuju layar host</h2>
-      <p>Dari memasang relay sampai layar Host terlihat di Controller.</p>
+      <h2>Dua langkah menuju layar host</h2>
+      <p>Relay sudah disiapkan operator — cukup pasang Host &amp; Controller lalu isi info.</p>
+    </div>
+    <div class="callout good" style="margin:0 auto 28px; max-width:760px">
+      <b>Info dari operator</b> — siapkan dulu: alamat relay, port relay, dan file <code>relay-ca.crt</code>.
     </div>
     <div class="steps">
       <div class="step">
         <div class="rail"><div class="num">1</div><div class="line"></div></div>
         <div class="body">
-          <h4>Pasang Relay</h4>
-          <p>Di PC/Server yang selalu online dan punya IP publik. Buka PowerShell sebagai Administrator dan jalankan:</p>
-          <pre><code>powershell -ExecutionPolicy Bypass -File install-relay-service.ps1 -Port 8443</code></pre>
-          <table>
-            <tr><th>Alamat relay</th><td>contoh: <code>relay.contoh.com</code> atau IP publik</td></tr>
-            <tr><th>Port</th><td><code>8443</code> (default, otomatis dibuka di firewall)</td></tr>
-            <tr><th>File CA</th><td>ambil <code>relay-ca.crt</code> dari <code>C:\ProgramData\RdpV\relay\.relay\</code></td></tr>
-          </table>
-          <div class="callout">Kirim file <code>relay-ca.crt</code> ini ke semua klien yang memasang Host &amp; Controller.</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="rail"><div class="num">2</div><div class="line"></div></div>
-        <div class="body">
           <h4>Pasang Host</h4>
           <p>Di PC yang layarnya mau dilihat:</p>
           <table>
             <tr><th>Installer</th><td>klik kanan <b>RdpV.Host.Setup.exe</b> → <b>Run as Administrator</b></td></tr>
-            <tr><th>Relay host</th><td>isi alamat relay dari Langkah 1</td></tr>
-            <tr><th>Relay port</th><td>isi port relay</td></tr>
+            <tr><th>Relay host</th><td>isi alamat relay dari operator</td></tr>
+            <tr><th>Relay port</th><td>isi port relay (mis. <code>8443</code>)</td></tr>
             <tr><th>Relay CA</th><td>klik <b>Pilih…</b> → cari file <code>relay-ca.crt</code></td></tr>
           </table>
-          <p style="margin-top:14px">Klik <b>Pasang Sekarang</b>, lalu <b>catat Device ID &amp; Auth Token</b> yang tampil.</p>
+          <p style="margin-top:14px">Klik <b>Pasang Sekarang</b>, tunggu selesai, lalu <b>catat Device ID &amp; Auth Token</b> yang tampil.</p>
           <div class="callout good">Kirim <b>Device ID &amp; Auth Token</b> ini ke penonton yang memakai Controller.</div>
         </div>
       </div>
 
       <div class="step">
-        <div class="rail"><div class="num">3</div></div>
+        <div class="rail"><div class="num">2</div></div>
         <div class="body">
           <h4>Pasang Controller &amp; Connect</h4>
           <p>Di PC penonton:</p>
           <table>
             <tr><th>Installer</th><td>jalankan <b>RdpV.Controller.Setup.exe</b> → buka <b>RdpV Controller</b></td></tr>
-            <tr><th>Relay host</th><td>isi alamat relay</td></tr>
+            <tr><th>Relay host</th><td>isi alamat relay dari operator</td></tr>
             <tr><th>Relay port</th><td>isi port relay</td></tr>
-            <tr><th>Device ID</th><td>dari Host (langkah 2)</td></tr>
-            <tr><th>Auth Token</th><td>dari Host (langkah 2)</td></tr>
+            <tr><th>Device ID</th><td>dari Host (langkah 1)</td></tr>
+            <tr><th>Auth Token</th><td>dari Host (langkah 1)</td></tr>
             <tr><th>Trusted CA</th><td>pilih file <code>relay-ca.crt</code></td></tr>
           </table>
           <p style="margin-top:14px">Klik <b>Connect</b> — layar Host terlihat. Klik <b>Disconnect</b> saat selesai.</p>
@@ -474,7 +462,7 @@
   <div class="wrap">
     <div class="cta">
       <h2>Siap memantau layar dari mana saja?</h2>
-      <p>Download installer, ikuti tiga langkah, dan layar Host langsung terlihat.</p>
+      <p>Download installer, pasang di Host &amp; Controller, lalu isi info dari operator — layar Host langsung terlihat.</p>
       <a class="btn primary" href="#download">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
         Download Installer
