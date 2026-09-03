@@ -15,7 +15,7 @@ Pastikan kamu punya:
 
 **File yang perlu di-download:**
 
-Buka **https://keyyz12.github.io/rdpv/** dan download:
+Buka **https://drcreatordev.github.io/rdpv/** dan download:
 
 | File | Untuk apa |
 |------|-----------|

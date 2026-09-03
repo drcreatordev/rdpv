@@ -12,18 +12,18 @@
 
 ## 📥 Download
 
-Buka website download: **https://keyyz12.github.io/rdpv/**
+Buka website download: **https://drcreatordev.github.io/rdpv/**
 
 | Komponen | Ukuran | Link |
 |----------|--------|------|
-| 🖥️ **Host Setup** (GUI installer) | ~190 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe) |
-| 🎬 **Controller Setup** | ~96 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe) |
-| 🩺 **Host Indicator** (tray icon) | ~154 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.HostIndicator.exe) |
-| 🛰️ **Relay Server** (untuk operator) | ~78 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/RdpV.RelayServer.exe) |
-| ⚙️ **Install Relay Script** | <1 MB | [Download](https://github.com/Keyyz12/rdpv/releases/download/v1.0/install-relay-service.ps1) |
+| 🖥️ **Host Setup** (GUI installer) | ~190 MB | [Download](https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe) |
+| 🎬 **Controller Setup** | ~96 MB | [Download](https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe) |
+| 🩺 **Host Indicator** (tray icon) | ~154 MB | [Download](https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.HostIndicator.exe) |
+| 🛰️ **Relay Server** (untuk operator) | ~78 MB | [Download](https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.RelayServer.exe) |
+| ⚙️ **Install Relay Script** | <1 MB | [Download](https://github.com/drcreatordev/rdpv/releases/download/v1.0/install-relay-service.ps1) |
 
-> 💡 **Panduan cepat:** [QUICKSTART.md](https://keyyz12.github.io/rdpv/QUICKSTART.md) — 3 langkah simpel untuk klien.
-> 📖 **Panduan lengkap:** [PANDUAN.md](https://keyyz12.github.io/rdpv/PANDUAN.md)
+> 💡 **Panduan cepat:** [QUICKSTART.md](https://drcreatordev.github.io/rdpv/QUICKSTART.md) — 3 langkah simpel untuk klien.
+> 📖 **Panduan lengkap:** [PANDUAN.md](https://drcreatordev.github.io/rdpv/PANDUAN.md)
 
 ---
 
@@ -199,8 +199,8 @@ src/RelayServer/bin/Release/net8.0-windows/win-x64/publish/RdpV.RelayServer.exe 
 
 ## 🙋 Support
 
-- **Issue / bug:** [GitHub Issues](https://github.com/Keyyz12/rdpv/issues)
-- **Panduan pengguna:** [PANDUAN.md](https://keyyz12.github.io/rdpv/PANDUAN.md)
+- **Issue / bug:** [GitHub Issues](https://github.com/drcreatordev/rdpv/issues)
+- **Panduan pengguna:** [PANDUAN.md](https://drcreatordev.github.io/rdpv/PANDUAN.md)
 
 ---
 
