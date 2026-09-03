@@ -3,76 +3,303 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RdpV — Remote Desktop</title>
+<meta name="description" content="RdpV — Remote Desktop view-only. Lihat layar PC dari mana saja, aman lewat TLS, tanpa kontrol jarak jauh." />
+<title>RdpV — Remote Desktop View-Only</title>
 <style>
-  :root { --brand:#1a73e8; --bg:#0f1221; --card:#171b2e; --text:#eef1f8; --muted:#9aa3c0; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:'Segoe UI', system-ui, sans-serif; background:var(--bg); color:var(--text); }
-  header { background:linear-gradient(135deg,#1a73e8,#6b3ff2); padding:48px 24px; text-align:center; }
-  header h1 { margin:0 0 8px; font-size:34px; }
-  header p { margin:0; color:#e6ecff; }
-  main { max-width:960px; margin:0 auto; padding:32px 16px; }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
-  .card { background:var(--card); border:1px solid #2a3050; border-radius:14px; padding:24px; text-align:center; }
-  .card h2 { margin:0 0 10px; font-size:20px; }
-  .card p { color:var(--muted); font-size:14px; min-height:44px; margin:0 0 18px; }
-  .badge { display:inline-block; background:#0e2a5e; color:#7fb1ff; font-size:12px; padding:3px 10px; border-radius:99px; margin-bottom:14px; }
-  .btn { display:block; background:var(--brand); color:#fff; text-decoration:none; padding:14px 20px; border-radius:10px; font-weight:600; font-size:16px; transition:background .15s; }
-  .btn:hover { background:#0f5fd0; }
-  .btn.ghost { background:#232a44; }
-  .btn.ghost:hover { background:#2d3558; }
-  ol { color:var(--muted); font-size:14px; line-height:1.8; }
-  footer { text-align:center; color:#5b6486; font-size:13px; padding:32px 0 48px; }
-  a { color:#7fb1ff; }
+  :root {
+    --brand:#1a73e8; --brand2:#6b3ff2;
+    --bg:#0f1221; --bg2:#141829; --card:#171b2e; --card2:#1d2136;
+    --text:#eef1f8; --muted:#9aa3c0; --line:#2a3050;
+    --ok:#35c47f; --warn:#ffb454;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  a { color:var(--brand); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 20px; }
+
+  /* ===== Navbar ===== */
+  nav { position:sticky; top:0; z-index:50; background:rgba(15,18,33,.82); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  nav .wrap { display:flex; align-items:center; justify-content:space-between; height:62px; }
+  .logo { font-weight:800; font-size:20px; letter-spacing:.5px; }
+  .logo span { color:var(--brand); }
+  nav .links { display:flex; gap:22px; align-items:center; }
+  nav .links a { color:var(--muted); font-weight:600; font-size:14px; }
+  nav .links a:hover { color:var(--text); text-decoration:none; }
+  .btn-sm { background:var(--brand); color:#fff !important; padding:8px 16px; border-radius:8px; font-weight:700 !important; }
+  .btn-sm:hover { background:#0f5fd0; text-decoration:none !important; }
+
+  /* ===== Hero ===== */
+  .hero { background:linear-gradient(135deg,#1a73e8,#6b3ff2); padding:78px 20px 64px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 10%, rgba(255,255,255,.15), transparent 40%); }
+  .hero h1 { font-size:44px; font-weight:800; margin:0 0 14px; position:relative; }
+  .hero p { font-size:18px; color:#e6ecff; max-width:640px; margin:0 auto 28px; position:relative; }
+  .hero-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; }
+  .hero .btn { background:#fff; color:var(--brand2); padding:14px 28px; border-radius:10px; font-weight:800; font-size:16px; }
+  .hero .btn.alt { background:rgba(255,255,255,.16); color:#fff; border:1px solid rgba(255,255,255,.5); }
+  .hero .btn:hover { transform:translateY(-2px); text-decoration:none; }
+  .hero-badges { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:26px; position:relative; }
+  .hero-badges span { background:rgba(255,255,255,.14); padding:5px 14px; border-radius:99px; font-size:13px; font-weight:600; }
+
+  /* ===== Sections ===== */
+  section { padding:64px 20px; }
+  .sec-head { text-align:center; margin-bottom:40px; }
+  .sec-head h2 { font-size:30px; font-weight:800; margin-bottom:8px; }
+  .sec-head p { color:var(--muted); max-width:560px; margin:0 auto; }
+
+  /* ===== Cards ===== */
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px; transition:transform .15s, border-color .15s; }
+  .card:hover { transform:translateY(-3px); border-color:#3a4266; }
+  .card .icon { font-size:30px; margin-bottom:12px; }
+  .card h3 { font-size:20px; margin-bottom:8px; }
+  .card p { color:var(--muted); font-size:14px; margin-bottom:18px; min-height:44px; }
+  .badge { display:inline-block; background:#0e2a5e; color:#7fb1ff; font-size:12px; padding:3px 12px; border-radius:99px; margin-bottom:12px; font-weight:700; }
+  .btn { display:inline-block; background:var(--brand); color:#fff; padding:13px 22px; border-radius:10px; font-weight:700; font-size:15px; text-align:center; }
+  .btn:hover { background:#0f5fd0; text-decoration:none; }
+  .btn.block { display:block; }
+  .btn.ghost { background:var(--card2); border:1px solid var(--line); }
+  .btn.ghost:hover { background:#28305c; }
+  .meta { font-size:12px; color:var(--muted); margin-top:10px; display:block; }
+
+  /* ===== Features ===== */
+  .feat { background:var(--bg2); border-bottom:1px solid var(--line); }
+  .feat-item { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
+  .feat-item h4 { font-size:16px; margin-bottom:6px; }
+  .feat-item p { color:var(--muted); font-size:13px; }
+
+  /* ===== Steps ===== */
+  .steps { max-width:760px; margin:0 auto; }
+  .step { display:flex; gap:18px; margin-bottom:26px; }
+  .step .num { flex:0 0 44px; height:44px; border-radius:12px; background:linear-gradient(135deg,var(--brand),var(--brand2)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; }
+  .step .body { flex:1; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; }
+  .step .body h4 { font-size:18px; margin-bottom:10px; }
+  .step .body table { width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px; }
+  .step .body th, .step .body td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
+  .step .body th { color:var(--muted); font-weight:600; width:150px; }
+  .step .body code { background:#0a0d18; padding:2px 8px; border-radius:5px; font-size:12.5px; }
+  .callout { background:rgba(53,196,127,.08); border-left:4px solid var(--ok); border-radius:0 10px 10px 0; padding:14px 16px; font-size:14px; margin-top:12px; }
+  .callout.warn { background:rgba(255,180,84,.08); border-left-color:var(--warn); }
+
+  /* ===== FAQ ===== */
+  details { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:12px; max-width:760px; margin-inline:auto; }
+  summary { font-weight:700; cursor:pointer; }
+  details p { color:var(--muted); font-size:14px; margin-top:10px; }
+
+  /* ===== CTA banner ===== */
+  .cta { background:linear-gradient(135deg,#1a73e8,#6b3ff2); border-radius:20px; padding:40px; text-align:center; }
+  .cta h2 { font-size:28px; margin-bottom:10px; }
+  .cta p { color:#e6ecff; margin-bottom:22px; }
+  .cta .btn { background:#fff; color:var(--brand2); padding:14px 30px; font-weight:800; }
+
+  /* ===== Footer ===== */
+  footer { border-top:1px solid var(--line); padding:34px 20px; text-align:center; color:#5b6486; font-size:13px; }
+  footer .f-links { display:flex; gap:20px; justify-content:center; margin-bottom:12px; flex-wrap:wrap; }
+  footer a { color:#7fb1ff; }
+
+  @media (max-width:600px){ .hero h1{font-size:32px;} section{padding:44px 16px;} }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>RdpV Remote Desktop</h1>
-  <p>Lihat layar laptop dari mana saja, aman lewat TLS &mdash; tanpa kontrol jarak jauh &mdash; download di sini.</p>
+<!-- Navbar -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Rdp<span>V</span></div>
+    <div class="links">
+      <a href="#download">Download</a>
+      <a href="#cara">Cara Pakai</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn-sm" href="#download">Download Sekarang</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <h1>Lihat Layar PC, dari Mana Saja</h1>
+  <p>RdpV adalah Remote Desktop <b>view-only</b> — lihat layar PC lain secara langsung,
+    aman lewat enkripsi TLS, tanpa kontrol jarak jauh, tanpa transfer file.</p>
+  <div class="hero-actions">
+    <a class="btn" href="#download">Download Installer</a>
+    <a class="btn alt" href="#cara">Lihat Cara Pakai</a>
+  </div>
+  <div class="hero-badges">
+    <span>🔒 TLS Enkripsi</span>
+    <span>👁️ Hanya Melihat</span>
+    <span>🛡️ Token Rahasia</span>
+    <span>⚡ Auto-Start Service</span>
+  </div>
 </header>
 
-<main>
-  <div class="cards">
-    <div class="card">
-      <span class="badge">untuk laptop yang &ldquo;ditonton&rdquo;</span>
-      <h2>Host</h2>
-      <p>Pasang di laptop yang layarnya ingin dilihat. Berjalan diam-diam di background, ada indikator task-tray saat ada penonton.</p>
-      <a class="btn" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe" download>Download Host Installer</a>
+<!-- Download -->
+<section id="download">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>📥 Download</h2>
+      <p>Pilih sesuai kebutuhan. Instalernya mandiri (self-contained) — tidak perlu install .NET.</p>
     </div>
 
-    <div class="card">
-      <span class="badge">untuk laptop penonton</span>
-      <h2>Controller</h2>
-      <p>Pasang di laptop yang dipakai melihat. Tampilan bersih: connect, lihat live, status &amp; latency.</p>
-      <a class="btn" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe" download>Download Controller Installer</a>
+    <div class="grid">
+      <div class="card">
+        <span class="badge">Untuk PC yang ditonton</span>
+        <div class="icon">🖥️</div>
+        <h3>Host</h3>
+        <p>Pasang di PC yang layarnya ingin dilihat. Berjalan sebagai service di background, lengkap dengan GUI installer.</p>
+        <a class="btn block" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Host.Setup.exe" download>Download Host Installer</a>
+        <span class="meta">~190 MB &bull; Windows x64</span>
+      </div>
+
+      <div class="card">
+        <span class="badge">Untuk PC penonton</span>
+        <div class="icon">🎬</div>
+        <h3>Controller</h3>
+        <p>Pasang di PC yang dipakai melihat. Tampilan bersih: connect, lihat live, status &amp; latency, mode fullscreen.</p>
+        <a class="btn block" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.Controller.Setup.exe" download>Download Controller Installer</a>
+        <span class="meta">~96 MB &bull; Windows x64</span>
+      </div>
+
+      <div class="card">
+        <span class="badge">Opsional &bull; indikator tray</span>
+        <div class="icon">🩺</div>
+        <h3>Host Indicator</h3>
+        <p>Ikon di task-tray: hijau saat ada penonton, normal saat idle. Jalaankan di PC Host.</p>
+        <a class="btn block ghost" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.HostIndicator.exe" download>Download Host Indicator</a>
+        <span class="meta">~154 MB &bull; Windows x64</span>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:22px">
+      <div class="card" style="text-align:center">
+        <span class="badge">Untuk operator / penyedia relay</span>
+        <div class="icon">🛰️</div>
+        <h3>Relay Server</h3>
+        <p>Jalankan relay sendiri sebagai Windows service auto-start. Untuk mengontrol layanan Anda sendiri.</p>
+        <a class="btn block ghost" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.RelayServer.exe" download>Download Relay (exe)</a>
+        <a class="btn block ghost" style="margin-top:10px" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/install-relay-service.ps1" download>Download install-relay-service.ps1</a>
+      </div>
+      <div class="card" style="text-align:center">
+        <span class="badge">Dokumentasi</span>
+        <div class="icon">📚</div>
+        <h3>Panduan &amp; Sumber</h3>
+        <p>Butuh panduan lebih lengkap atau mau lihat kode sumber? Semua tersedia di GitHub.</p>
+        <a class="btn block ghost" href="QUICKSTART.md" download>Quick Start Guide</a>
+        <a class="btn block ghost" style="margin-top:10px" href="https://github.com/drcreatordev/rdpv">Lihat di GitHub</a>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="card" style="margin-top:24px">
-    <h2 style="text-align:left">Cara pakai</h2>
-    <ol style="text-align:left">
-      <li>Download &amp; jalankan <b>Host Installer</b> di laptop yang mau ditonton (klik kanan &gt; Run as administrator). Catat <b>Device ID</b> dan <b>Auth Token</b> yang tampil.</li>
-      <li>Download &amp; jalankan <b>Controller Installer</b> di laptop penonton.</li>
-      <li>Buka aplikasi <b>RdpV Controller</b>, masukkan alamat relay + Device ID + Auth Token, pilih file <b>relay-ca.crt</b> (Trusted CA), klik <b>Connect</b>.</li>
-      <li>Selesai melihat? Klik <b>Disconnect</b>. Laptop host akan otomatis berubah dari hijau ke normal di tray.</li>
-      <li>Panduan cepat: <a href="QUICKSTART.md">QUICKSTART.md</a> &bull; Panduan lengkap: <a href="PANDUAN.md">PANDUAN.md</a></li>
-    </ol>
+<!-- Cara Pakai -->
+<section id="cara" style="background:var(--bg2); border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>🚀 Cara Pakai</h2>
+      <p>Hanya 3 langkah — dari memasang relay sampai layar Host terlihat.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="body">
+          <h4>Pasang Relay</h4>
+          <p>Di PC/Server yang selalu online dengan IP publik. Buka PowerShell sebagai Administrator:</p>
+          <table>
+            <tr><th>Perintah</th><td><code>powershell -ExecutionPolicy Bypass -File install-relay-service.ps1 -Port 8443</code></td></tr>
+            <tr><th>Alamat relay</th><td>contoh: <code>relay.contoh.com</code> atau IP publik</td></tr>
+            <tr><th>Port</th><td><code>8443</code> (default, otomatis dibuka di firewall)</td></tr>
+            <tr><th>File CA</th><td>ambil <code>relay-ca.crt</code> dari <code>C:\ProgramData\RdpV\relay\.relay\</code></td></tr>
+          </table>
+          <div class="callout warn">Kirim file <b>relay-ca.crt</b> ini ke semua klien yang memasang Host &amp; Controller.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">2</div>
+        <div class="body">
+          <h4>Pasang Host</h4>
+          <p>Di PC yang layarnya mau dilihat:</p>
+          <table>
+            <tr><th>Langkah</th><td>Klik kanan <b>RdpV.Host.Setup.exe</b> → <b>Run as Administrator</b></td></tr>
+            <tr><th>Relay host</th><td>isi alamat relay dari Langkah 1</td></tr>
+            <tr><th>Relay port</th><td>isi port relay</td></tr>
+            <tr><th>Relay CA</th><td>klik <b>Pilih…</b> → cari file <code>relay-ca.crt</code></td></tr>
+          </table>
+          <p style="margin-top:10px">Klik <b>Pasang Sekarang</b>, tunggu selesai, lalu <b>catat Device ID &amp; Auth Token</b> yang tampil.</p>
+          <div class="callout">Kirim <b>Device ID &amp; Auth Token</b> ini ke penonton (yang pakai Controller).</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">3</div>
+        <div class="body">
+          <h4>Pasang Controller &amp; Connect</h4>
+          <p>Di PC penonton:</p>
+          <table>
+            <tr><th>Langkah</th><td>Jalankan <b>RdpV.Controller.Setup.exe</b> → buka <b>RdpV Controller</b></td></tr>
+            <tr><th>Relay host</th><td>isi alamat relay</td></tr>
+            <tr><th>Relay port</th><td>isi port relay</td></tr>
+            <tr><th>Device ID</th><td>dari Host (langkah 2)</td></tr>
+            <tr><th>Auth Token</th><td>dari Host (langkah 2)</td></tr>
+            <tr><th>Trusted CA</th><td>pilih file <code>relay-ca.crt</code></td></tr>
+          </table>
+          <p style="margin-top:10px">Klik <b>Connect</b> → ✓ layar Host terlihat. Klik <b>Disconnect</b> saat selesai.</p>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="card" style="margin-top:24px">
-    <h2 style="text-align:left">Untuk operator / yang mau mandiri</h2>
-    <p style="text-align:left">Jalankan relay sendiri (Windows service, auto-start) di server/pc yang selalu online.</p>
-    <a class="btn ghost" style="margin-bottom:8px" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/RdpV.RelayServer.exe" download>Download Relay (exe)</a>
-    <a class="btn ghost" href="https://github.com/drcreatordev/rdpv/releases/download/v1.0/install-relay-service.ps1" download>Download install-relay-service.ps1</a>
+<!-- Fitur -->
+<section id="fitur">
+  <div class="wrap">
+    <div class="sec-head"><h2>✨ Fitur Unggulan</h2><p>Semua yang Anda butuhkan untuk remote viewing yang aman.</p></div>
+    <div class="grid">
+      <div class="feat-item"><h4>🔒 View-Only</h4><p>Tidak ada kontrol mouse/keyboard, tidak ada transfer file — benar-benar hanya melihat.</p></div>
+      <div class="feat-item"><h4>🔐 TLS End-to-End</h4><p>Semua komunikasi terenkripsi antara Host, Relay, dan Controller.</p></div>
+      <div class="feat-item"><h4>🛡️ Token Rahasia</h4><p>Akses hanya dengan Device ID + Auth Token (di-hash, tidak pernah plain).</p></div>
+      <div class="feat-item"><h4>🩺 Host Indicator</h4><p>Tray icon hijau saat ada penonton — tahu kapan layar sedang dilihat.</p></div>
+      <div class="feat-item"><h4>🖵 Fullscreen</h4><p>Mode layar penuh, otomatis mengecualikan jendela Controller dari capture.</p></div>
+      <div class="feat-item"><h4>⚡ Auto-Start</h4><p>Host &amp; Relay berjalan sebagai Windows service, otomatis saat boot.</p></div>
+    </div>
   </div>
+</section>
 
-  <footer>
-    Keamanan: akses hanya lewat token rahasia milik pemilik host &mdash; tidak ada backdoor.
-    Relay memvalidasi melalui hash SHA-256 token. Lihat <code style="background:#1d2236;padding:2px 6px;border-radius:4px">PANDUAN.md</code> untuk detail.
-  </footer>
-</main>
+<!-- FAQ -->
+<section id="faq" style="background:var(--bg2); border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head"><h2>💬 Pertanyaan Umum</h2><p>Jawaban cepat untuk masalah yang sering terjadi.</p></div>
+    <details><summary>Tidak bisa connect, kenapa?</summary><p>Pastikan relay host/port/CA benar, relay online, port firewall terbuka, dan Device ID/Token sesuai.</p></details>
+    <details><summary>Muncul layar dalam layar (feedback loop)?</summary><p>Ini terjadi saat Host dan Controller di PC yang sama. Gunakan mode <b>Fullscreen</b> (<code>Ctrl+Shift+F11</code>).</p></details>
+    <details><summary>Sempat connect lalu putus?</summary><p>Cek relay masih online dan Host service masih jalan: <code>sc query RdpV.Host</code>.</p></details>
+    <details><summary>Resolusi tidak sesuai monitor?</summary><p>Host mengirim resolusi native monitor. Pilih resolusi streaming di dropdown Controller sesuai kebutuhan.</p></details>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>Siap memantau layar dari mana saja?</h2>
+      <p>Download installer, ikuti 3 langkah, dan layar Host langsung terlihat.</p>
+      <a class="btn" href="#download">Download Installer</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-links">
+    <a href="#download">Download</a>
+    <a href="#cara">Cara Pakai</a>
+    <a href="#fitur">Fitur</a>
+    <a href="https://github.com/drcreatordev/rdpv">GitHub</a>
+    <a href="QUICKSTART.md">Quick Start</a>
+    <a href="PANDUAN.md">Panduan Lengkap</a>
+  </div>
+  <div>Keamanan: akses hanya lewat token rahasia milik pemilik host — tidak ada backdoor. Dibangun dengan .NET 8.</div>
+</footer>
 
 </body>
 </html>
